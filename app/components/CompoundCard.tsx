@@ -23,8 +23,10 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
 }) => {
   return (
     <motion.div
-      className="relative p-4 bg-white rounded-lg shadow-lg"
+      className="relative p-4 bg-white rounded-lg shadow-lg cursor-pointer"
       onClick={onLocate}
+      transition={{ ease: "easeOut", duration: 0.3 }}
+      whileHover={{ scale: 1.05 }}
     >
       <img
         src={image}
