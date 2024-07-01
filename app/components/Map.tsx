@@ -1,14 +1,7 @@
-import React, { useEffect } from "react";
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-  useMap,
-  DivIcon,
-} from "react-leaflet";
+import React from "react";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import L from "leaflet";
+import L, { DivIcon } from "leaflet";
 import MapViewChanger from "./MapViewChanger";
 
 interface Compound {

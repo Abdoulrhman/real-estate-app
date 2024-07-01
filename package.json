@@ -10,6 +10,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/leaflet": "^1.9.12",
     "axios": "^1.7.2",
     "framer-motion": "^11.2.12",
     "leaflet": "^1.9.4",
