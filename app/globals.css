@@ -1,3 +1,71 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+html,
+body,
+#__next {
+  height: 100%;
+}
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+}
+
+@media (min-width: 768px) {
+  .leaflet-container {
+    height: calc(100vh - 4rem);
+  }
+}
+
+/* Custom Scrollbar Styles */
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+}
+
+.scrollbar-thumb-rounded {
+  scrollbar-color: #a0aec0 #edf2f7; /* Firefox */
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-thumb {
+  background-color: #a0aec0;
+  border-radius: 8px;
+}
+
+.scrollbar-thumb-rounded::-webkit-scrollbar-track {
+  background-color: #edf2f7;
+  border-radius: 8px;
+}
+
+/* Custom styles for react-modal */
+
+.modal {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  padding: 20px;
+  max-width: 90%;
+  width: 100%;
+  max-height: 90%;
+  overflow-y: auto;
+  outline: none;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 99999;
+}

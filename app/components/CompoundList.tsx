@@ -1,4 +1,5 @@
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
 import CompoundCard from "./CompoundCard";
 
 interface CompoundListProps {
@@ -10,6 +11,7 @@ interface CompoundListProps {
     position: [number, number];
   }[];
   onFavorite: (id: number) => void;
+  favorites: number[];
   onLocate: (compound: {
     id: number;
     location: string;
@@ -23,15 +25,20 @@ const CompoundList: React.FC<CompoundListProps> = ({
   compounds,
   onFavorite,
   onLocate,
+  favorites,
 }) => {
+  useEffect(() => {
+    console.log({ favorites });
+  }, [favorites]);
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
       {compounds.map((compound) => (
         <CompoundCard
           key={compound.id}
           {...compound}
           onFavorite={onFavorite}
           onLocate={() => onLocate(compound)}
+          isFavorite={favorites ? favorites.includes(compound.id) : false}
         />
       ))}
     </div>

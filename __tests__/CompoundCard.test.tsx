@@ -1,9 +1,6 @@
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { toBeInTheDocument } from "@testing-library/jest-dom";
-import CompoundCard from "../components/CompoundCard";
-
-expect.extend({ toBeInTheDocument });
+import CompoundCard from "@/app/components/CompoundCard";
 
 describe("CompoundCard", () => {
   const compound = {

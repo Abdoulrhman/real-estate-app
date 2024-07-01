@@ -1,36 +1,112 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Real Estate Marketplace
 
-## Getting Started
+This project is a task for PropertySorted Company, demonstrating a simple real estate marketplace front-end application using Next.js, React, Tailwind CSS, Framer Motion, React Leaflet, and TypeScript.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- View a list of real estate compounds.
+- Search for compounds.
+- Save and remove compounds from favorites.
+- View the favorites in a modal.
+- Locate compounds on a map with custom markers.
+- Responsive design.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Libraries Used
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Next.js**: A React framework for server-rendered applications.
+- **React**: A JavaScript library for building user interfaces.
+- **Tailwind CSS**: A utility-first CSS framework for rapid UI development.
+- **Framer Motion**: A library for animations in React.
+- **React Leaflet**: A library for interactive maps in React.
+- **React Icons**: A library for popular icons in React.
+- **React Modal**: A library for accessible modal dialogs in React.
+- **Axios**: A promise-based HTTP client for making API requests.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+## Functions
 
-## Learn More
+### `CompoundCard`
 
-To learn more about Next.js, take a look at the following resources:
+- **Props**:
+  - `id`: Number - The unique identifier for the compound.
+  - `location`: String - The location of the compound.
+  - `price`: Number - The price of the compound.
+  - `image`: String - The URL of the compound image.
+  - `isFavorite`: Boolean - Indicates if the compound is a favorite.
+  - `onFavorite`: Function - The function to handle adding/removing the compound from favorites.
+  - `onLocate`: Function - The function to handle locating the compound on the map.
+- **Description**: A card component that displays compound information and allows adding/removing from favorites and locating on the map.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### `CompoundList`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+- **Props**:
+  - `compounds`: Array - A list of compounds to display.
+  - `favorites`: Array - A list of favorite compound IDs.
+  - `onFavorite`: Function - The function to handle adding/removing compounds from favorites.
+  - `onLocate`: Function - The function to handle locating compounds on the map.
+- **Description**: A component that displays a list of `CompoundCard` components.
 
-## Deploy on Vercel
+### `Favorites`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- **Props**:
+  - `favorites`: Array - A list of favorite compound IDs.
+  - `compounds`: Array - A list of all compounds.
+  - `onRemove`: Function - The function to handle removing a compound from favorites.
+  - `onClear`: Function - The function to clear all favorites.
+- **Description**: A component that displays a list of favorite compounds.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+### `Search`
+
+- **Props**:
+  - `query`: String - The current search query.
+  - `setQuery`: Function - The function to update the search query.
+- **Description**: A component that provides a search input to filter compounds by location.
+
+### `Map`
+
+- **Props**:
+  - `compounds`: Array - A list of compounds to display on the map.
+  - `activeCompound`: Object - The currently active compound to focus on the map.
+- **Description**: A component that displays compounds on an interactive map using React Leaflet.
+
+### `Modal`
+
+- **Props**:
+  - `isOpen`: Boolean - Indicates if the modal is open.
+  - `onClose`: Function - The function to close the modal.
+  - `children`: ReactNode - The content to display inside the modal.
+- **Description**: A reusable modal component for displaying the favorites list.
+
+### `Home`
+
+- **Description**: The main component that integrates all the other components and manages the state of compounds, favorites, and the search query.
+
+## Installation
+
+1. Clone the repository:
+
+   ```sh
+   git clone <repository-url>
+   cd real-estate-marketplace
+   ```
+
+2. Install dependencies:
+
+   ```sh
+   npm install
+   ```
+
+3. Run the development server:
+
+   ```sh
+   npm run dev
+   ```
+
+4. Open your browser and navigate to `http://localhost:3000`.
+
+## Usage
+
+- Use the search bar to filter compounds by location.
+- Click on a compound card to locate it on the map.
+- Click on the heart icon to add/remove a compound from favorites.
+- Click the "Favorites" button in the header to view the favorites in a modal.
+- Use the map to view the location of compounds with custom markers.

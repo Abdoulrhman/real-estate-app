@@ -1,11 +1,13 @@
 import React from "react";
 import { motion } from "framer-motion";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 interface CompoundCardProps {
   id: number;
   location: string;
   price: number;
   image: string;
+  isFavorite: boolean;
   onFavorite: (id: number) => void;
   onLocate: () => void;
 }
@@ -15,12 +17,13 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
   location,
   price,
   image,
+  isFavorite,
   onFavorite,
   onLocate,
 }) => {
   return (
     <motion.div
-      className="p-4 bg-white rounded-lg shadow-lg"
+      className="relative p-4 bg-white rounded-lg shadow-lg"
       onClick={onLocate}
     >
       <img
@@ -31,15 +34,19 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
       <div className="mt-2">
         <h2 className="text-lg font-semibold">{location}</h2>
         <p className="text-gray-500">${price.toLocaleString()}</p>
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onFavorite(id);
-          }}
-          className="mt-2 bg-blue-500 text-white py-1 px-2 rounded"
-        >
-          Add to Favorites
-        </button>
+      </div>
+      <div
+        onClick={(e) => {
+          e.stopPropagation();
+          onFavorite(id);
+        }}
+        className="absolute bottom-3 right-2 cursor-pointer"
+      >
+        {isFavorite ? (
+          <FaHeart className="text-red-500" size={24} />
+        ) : (
+          <FaRegHeart className="text-gray-500" size={24} />
+        )}
       </div>
     </motion.div>
   );

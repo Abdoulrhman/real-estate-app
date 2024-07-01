@@ -1,7 +1,7 @@
 // __tests__/CompoundList.test.tsx
 import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
-import CompoundList from "../components/CompoundList";
+import CompoundList from "@/app/components/CompoundList";
 
 describe("CompoundList", () => {
   const compounds = [
