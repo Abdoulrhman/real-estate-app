@@ -22,10 +22,13 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
   onFavorite,
   onLocate,
 }) => {
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "";
+  const apiUrl = `${baseUrl}/api/compounds`;
+
   const handleFavoriteClick = async (e: React.MouseEvent) => {
     e.stopPropagation();
     try {
-      const response = await axios.put("/api/compounds", {
+      const response = await axios.put(apiUrl, {
         id,
         location,
         price,

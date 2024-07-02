@@ -32,13 +32,14 @@ const Home = () => {
   const [activeCompound, setActiveCompound] = useState<Compound | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMapView, setIsMapView] = useState(false);
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "";
+  const apiUrl = `${baseUrl}/api/compounds`;
 
   useEffect(() => {
-    axios.get("/api/compounds").then((response) => setCompounds(response.data));
+    axios.get(apiUrl).then((response) => setCompounds(response.data));
   }, []);
 
   const handleFavorite = async (id: number) => {
-    debugger;
     const updatedCompounds = compounds.map((compound) =>
       compound.id === id
         ? { ...compound, isFavorite: !compound.isFavorite }
@@ -52,7 +53,7 @@ const Home = () => {
     );
 
     if (favoriteCompound) {
-      await axios.put("/api/compounds", favoriteCompound);
+      await axios.put(apiUrl, favoriteCompound);
     }
 
     setFavorites(
@@ -74,7 +75,7 @@ const Home = () => {
     );
 
     if (removedCompound) {
-      await axios.put("/api/compounds", removedCompound);
+      await axios.put(apiUrl, removedCompound);
     }
 
     setFavorites(
@@ -95,7 +96,7 @@ const Home = () => {
 
     await Promise.all(
       updatedCompounds.map(async (compound) => {
-        await axios.put("/api/compounds", compound);
+        await axios.put(apiUrl, compound);
       })
     );
   };

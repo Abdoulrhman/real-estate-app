@@ -25,10 +25,13 @@ const CompoundList: React.FC<CompoundListProps> = ({
   onLocate,
   favorites,
 }) => {
+  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "";
+  const apiUrl = `${baseUrl}/api/compounds`;
+
   const handleFavorite = async (compound: Compound) => {
     try {
       const updatedCompound = { ...compound, isFavorite: !compound.isFavorite };
-      const response = await axios.put("/api/compounds", updatedCompound);
+      const response = await axios.put(apiUrl, updatedCompound);
       if (response.status === 200) {
         onFavorite(compound.id);
       } else {
