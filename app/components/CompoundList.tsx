@@ -25,7 +25,7 @@ const CompoundList: React.FC<CompoundListProps> = ({
   onLocate,
   favorites,
 }) => {
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "";
+  const baseUrl = process.env.API_URL || "";
   const apiUrl = `${baseUrl}/api/compounds`;
 
   const handleFavorite = async (compound: Compound) => {

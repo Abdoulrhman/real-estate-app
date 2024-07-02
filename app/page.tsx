@@ -32,7 +32,7 @@ const Home = () => {
   const [activeCompound, setActiveCompound] = useState<Compound | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isMapView, setIsMapView] = useState(false);
-  const baseUrl = process.env.NEXT_PUBLIC_VERCEL_URL || "";
+  const baseUrl = process.env.API_URL || "";
   const apiUrl = `${baseUrl}/api/compounds`;
 
   useEffect(() => {
