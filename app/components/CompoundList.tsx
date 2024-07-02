@@ -1,24 +1,22 @@
 "use client";
-import React, { useEffect } from "react";
+import React from "react";
 import CompoundCard from "./CompoundCard";
+import axios from "axios";
+
+interface Compound {
+  id: number;
+  location: string;
+  price: number;
+  image: string;
+  position: [number, number];
+  isFavorite: boolean;
+}
 
 interface CompoundListProps {
-  compounds: {
-    id: number;
-    location: string;
-    price: number;
-    image: string;
-    position: [number, number];
-  }[];
+  compounds: Compound[];
   onFavorite: (id: number) => void;
   favorites: number[];
-  onLocate: (compound: {
-    id: number;
-    location: string;
-    price: number;
-    image: string;
-    position: [number, number];
-  }) => void;
+  onLocate: (compound: Compound) => void;
 }
 
 const CompoundList: React.FC<CompoundListProps> = ({
@@ -27,18 +25,28 @@ const CompoundList: React.FC<CompoundListProps> = ({
   onLocate,
   favorites,
 }) => {
-  useEffect(() => {
-    console.log({ favorites });
-  }, [favorites]);
+  const handleFavorite = async (compound: Compound) => {
+    try {
+      const updatedCompound = { ...compound, isFavorite: !compound.isFavorite };
+      const response = await axios.put("/api/compounds", updatedCompound);
+      if (response.status === 200) {
+        onFavorite(compound.id);
+      } else {
+        console.error("Failed to update favorite status");
+      }
+    } catch (error) {
+      console.error("Error updating favorite status:", error);
+    }
+  };
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
       {compounds.map((compound) => (
         <CompoundCard
           key={compound.id}
           {...compound}
-          onFavorite={onFavorite}
+          onFavorite={() => handleFavorite(compound)}
           onLocate={() => onLocate(compound)}
-          isFavorite={favorites ? favorites.includes(compound.id) : false}
         />
       ))}
     </div>

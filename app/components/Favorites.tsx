@@ -8,6 +8,7 @@ interface FavoritesProps {
     location: string;
     price: number;
     image: string;
+    isFavorite: boolean;
   }[];
   onRemove: (id: number) => void;
   onClear: () => void;
@@ -19,8 +20,8 @@ const Favorites: React.FC<FavoritesProps> = ({
   onRemove,
   onClear,
 }) => {
-  const favoriteCompounds = compounds.filter((compound) =>
-    favorites.includes(compound.id)
+  const favoriteCompounds = compounds.filter(
+    (compound) => compound.isFavorite === true
   );
 
   return (
@@ -36,7 +37,7 @@ const Favorites: React.FC<FavoritesProps> = ({
                 location={compound.location}
                 price={compound.price}
                 image={compound.image}
-                isFavorite={true}
+                isFavorite={compound.isFavorite}
                 onFavorite={onRemove}
                 onLocate={() => {}}
               />
