@@ -1,6 +1,7 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
+import cors from "cors";
 
 // Path to the JSON file
 const filePath = path.join(process.cwd(), "data", "compounds.json");
@@ -26,7 +27,28 @@ const writeData = (data: any) => {
   }
 };
 
-export async function GET() {
+// CORS middleware
+const corsMiddleware = cors({
+  origin: "*", // Allow all origins
+  methods: ["GET", "PUT", "POST"],
+});
+
+// Helper method to wait for a middleware to execute before continuing
+const runMiddleware = (req: NextRequest, res: NextResponse, fn: Function) => {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result: any) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+};
+
+export async function GET(req: NextRequest) {
+  const res = NextResponse.next();
+  await runMiddleware(req, res, corsMiddleware);
+
   try {
     const compounds = readData();
     return NextResponse.json(compounds);
@@ -35,9 +57,12 @@ export async function GET() {
   }
 }
 
-export async function PUT(request: Request) {
+export async function PUT(req: NextRequest) {
+  const res = NextResponse.next();
+  await runMiddleware(req, res, corsMiddleware);
+
   try {
-    const updatedCompound = await request.json();
+    const updatedCompound = await req.json();
     const compounds = readData();
 
     const index = compounds.findIndex(
