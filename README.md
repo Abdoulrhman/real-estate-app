@@ -1,7 +1,3 @@
-Sure, here is the updated README file with the added section about the JSON data file used as a server to persist data:
-
----
-
 # Real Estate Marketplace
 
 This project is a task for PropertySorted Company, demonstrating a simple real estate marketplace front-end application using Next.js, React, Tailwind CSS, Framer Motion, React Leaflet, and TypeScript.
