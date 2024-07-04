@@ -1,17 +1,14 @@
 import React from "react";
 import CompoundCard from "./CompoundCard";
+import { Compound } from "../types";
 
 interface FavoritesProps {
   favorites: number[];
-  compounds: {
-    id: number;
-    location: string;
-    price: number;
-    image: string;
-    isFavorite: boolean;
-  }[];
+  compounds: Compound[];
   onRemove: (id: number) => void;
   onClear: () => void;
+  setCompounds: React.Dispatch<React.SetStateAction<Compound[]>>;
+  setFavorites: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const Favorites: React.FC<FavoritesProps> = ({
@@ -19,6 +16,8 @@ const Favorites: React.FC<FavoritesProps> = ({
   compounds,
   onRemove,
   onClear,
+  setCompounds,
+  setFavorites,
 }) => {
   const favoriteCompounds = compounds.filter(
     (compound) => compound.isFavorite === true
@@ -40,6 +39,9 @@ const Favorites: React.FC<FavoritesProps> = ({
                 isFavorite={compound.isFavorite}
                 onFavorite={onRemove}
                 onLocate={() => {}}
+                setCompounds={setCompounds}
+                setFavorites={setFavorites}
+                compounds={compounds}
               />
             ))}
           </div>

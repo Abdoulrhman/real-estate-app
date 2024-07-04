@@ -1,14 +1,17 @@
 import { NextResponse } from "next/server";
-import fs from "fs";
+import fs from "fs/promises";
 import path from "path";
 
-// Path to the JSON file
 const filePath = path.join(process.cwd(), "data", "compounds.json");
 
-// Function to read the JSON file
-const readData = () => {
+interface Compound {
+  id: string;
+  [key: string]: any;
+}
+
+const readData = async (): Promise<Compound[]> => {
   try {
-    const data = fs.readFileSync(filePath, "utf8");
+    const data = await fs.readFile(filePath, "utf8");
     return JSON.parse(data);
   } catch (error) {
     console.error("Error reading data:", error);
@@ -16,10 +19,9 @@ const readData = () => {
   }
 };
 
-// Function to write to the JSON file
-const writeData = (data: any) => {
+const writeData = async (data: Compound[]): Promise<void> => {
   try {
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf8");
+    await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf8");
   } catch (error) {
     console.error("Error writing data:", error);
     throw new Error("Failed to write data");
@@ -28,7 +30,7 @@ const writeData = (data: any) => {
 
 export async function GET() {
   try {
-    const compounds = readData();
+    const compounds = await readData();
     return NextResponse.json(compounds);
   } catch (error) {
     return NextResponse.json({ error: "Failed to read data" }, { status: 500 });
@@ -37,17 +39,16 @@ export async function GET() {
 
 export async function PUT(request: Request) {
   try {
-    const updatedCompound = await request.json();
-    const compounds = readData();
+    const updatedCompound: Compound = await request.json();
+    const compounds = await readData();
 
     const index = compounds.findIndex(
-      (compound: any) => compound.id === updatedCompound.id
+      (compound) => compound.id === updatedCompound.id
     );
 
     if (index !== -1) {
-      // Merge existing compound data with updated data
       compounds[index] = { ...compounds[index], ...updatedCompound };
-      writeData(compounds);
+      await writeData(compounds);
       return NextResponse.json({ message: "Compound updated successfully" });
     } else {
       return NextResponse.json(

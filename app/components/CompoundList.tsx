@@ -17,6 +17,8 @@ interface CompoundListProps {
   onFavorite: (id: number) => void;
   favorites: number[];
   onLocate: (compound: Compound) => void;
+  setCompounds: React.Dispatch<React.SetStateAction<Compound[]>>;
+  setFavorites: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const CompoundList: React.FC<CompoundListProps> = ({
@@ -24,23 +26,11 @@ const CompoundList: React.FC<CompoundListProps> = ({
   onFavorite,
   onLocate,
   favorites,
+  setCompounds,
+  setFavorites,
 }) => {
   const baseUrl = process.env.API_URL || "";
   const apiUrl = `${baseUrl}/api/compounds`;
-
-  const handleFavorite = async (compound: Compound) => {
-    try {
-      const updatedCompound = { ...compound, isFavorite: !compound.isFavorite };
-      const response = await axios.put(apiUrl, updatedCompound);
-      if (response.status === 200) {
-        onFavorite(compound.id);
-      } else {
-        console.error("Failed to update favorite status");
-      }
-    } catch (error) {
-      console.error("Error updating favorite status:", error);
-    }
-  };
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
@@ -48,8 +38,11 @@ const CompoundList: React.FC<CompoundListProps> = ({
         <CompoundCard
           key={compound.id}
           {...compound}
-          onFavorite={() => handleFavorite(compound)}
+          onFavorite={onFavorite}
           onLocate={() => onLocate(compound)}
+          setCompounds={setCompounds}
+          setFavorites={setFavorites}
+          compounds={compounds}
         />
       ))}
     </div>

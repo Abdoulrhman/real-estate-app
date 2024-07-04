@@ -8,7 +8,7 @@
       31.6677052114,
       30.1598490856
     ],
-    "isFavorite": false
+    "isFavorite": true
   },
   {
     "id": 2,
@@ -19,7 +19,7 @@
       29.97648,
       30.948776
     ],
-    "isFavorite": false
+    "isFavorite": true
   },
   {
     "id": 3,
@@ -30,7 +30,7 @@
       30.002926,
       31.419978
     ],
-    "isFavorite": true
+    "isFavorite": false
   },
   {
     "id": 4,
@@ -41,7 +41,7 @@
       29.949846,
       30.904657
     ],
-    "isFavorite": true
+    "isFavorite": false
   },
   {
     "id": 5,

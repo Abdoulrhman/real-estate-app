@@ -6,24 +6,16 @@ import Favorites from "./components/Favorites";
 import Search from "./components/Search";
 import Modal from "./components/Modal";
 import dynamic from "next/dynamic";
-import ReactModal from "react-modal";
 import Image from "next/image";
 import { FaList, FaMap } from "react-icons/fa";
+import { handleFavorite, handleRemove, handleClear } from "./utils"; // Import utilities
+import { Compound } from "./types"; // Import the Compound type
 
 // Dynamically import the Map component to avoid SSR issues
 const Map = dynamic(() => import("./components/Map"), {
   ssr: false,
   loading: () => <p>Loading...</p>,
 });
-
-interface Compound {
-  id: number;
-  location: string;
-  price: number;
-  image: string;
-  position: [number, number];
-  isFavorite: boolean;
-}
 
 const Home = () => {
   const [compounds, setCompounds] = useState<Compound[]>([]);
@@ -39,66 +31,16 @@ const Home = () => {
     axios.get(apiUrl).then((response) => setCompounds(response.data));
   }, []);
 
-  const handleFavorite = async (id: number) => {
-    const updatedCompounds = compounds.map((compound) =>
-      compound.id === id
-        ? { ...compound, isFavorite: !compound.isFavorite }
-        : compound
-    );
-
-    setCompounds(updatedCompounds);
-
-    const favoriteCompound = updatedCompounds.find(
-      (compound) => compound.id === id
-    );
-
-    if (favoriteCompound) {
-      await axios.put(apiUrl, favoriteCompound);
-    }
-
-    setFavorites(
-      updatedCompounds
-        .filter((compound) => compound.isFavorite)
-        .map((compound) => compound.id)
-    );
+  const handleFavoriteClick = (id: number) => {
+    handleFavorite(compounds, setCompounds, setFavorites, apiUrl, id);
   };
 
-  const handleRemove = async (id: number) => {
-    const updatedCompounds = compounds.map((compound) =>
-      compound.id === id ? { ...compound, isFavorite: false } : compound
-    );
-
-    setCompounds(updatedCompounds);
-
-    const removedCompound = updatedCompounds.find(
-      (compound) => compound.id === id
-    );
-
-    if (removedCompound) {
-      await axios.put(apiUrl, removedCompound);
-    }
-
-    setFavorites(
-      updatedCompounds
-        .filter((compound) => compound.isFavorite)
-        .map((compound) => compound.id)
-    );
+  const handleRemoveClick = (id: number) => {
+    handleRemove(compounds, setCompounds, setFavorites, apiUrl, id);
   };
 
-  const handleClear = async () => {
-    const updatedCompounds = compounds.map((compound) => ({
-      ...compound,
-      isFavorite: false,
-    }));
-
-    setCompounds(updatedCompounds);
-    setFavorites([]);
-
-    await Promise.all(
-      updatedCompounds.map(async (compound) => {
-        await axios.put(apiUrl, compound);
-      })
-    );
+  const handleClearClick = () => {
+    handleClear(compounds, setCompounds, setFavorites, apiUrl);
   };
 
   const handleLocate = (compound: Compound) => {
@@ -123,7 +65,6 @@ const Home = () => {
 
   return (
     <>
-      {/* Header */}
       <header className="w-full bg-white text-gray-800 p-4 border-b">
         <div className="container flex justify-between items-center mx-auto my-0">
           <Image
@@ -141,7 +82,6 @@ const Home = () => {
         </div>
       </header>
       <div className="flex flex-col md:flex-row h-screen">
-        {/* Toggle Button for Mobile View */}
         <button
           className="md:hidden fixed bottom-4 right-4 bg-[#f9610f] text-white p-3 rounded-full shadow-lg z-[9999]"
           onClick={handleToggleView}
@@ -149,7 +89,6 @@ const Home = () => {
           {isMapView ? <FaList size={24} /> : <FaMap size={24} />}
         </button>
 
-        {/* Sidebar */}
         <aside
           className={`w-full md:w-1/3 bg-white p-4 overflow-auto ${
             isMapView ? "hidden md:block" : "block"
@@ -160,27 +99,29 @@ const Home = () => {
             <div className="flex-grow overflow-y-auto mb-4 scrollbar-thin scrollbar-thumb-rounded">
               <CompoundList
                 compounds={filteredCompounds}
-                onFavorite={handleFavorite}
+                onFavorite={handleFavoriteClick}
                 onLocate={handleLocate}
                 favorites={favorites}
+                setCompounds={setCompounds}
+                setFavorites={setFavorites}
               />
             </div>
           </div>
         </aside>
 
-        {/* Main Content */}
         <main className={`flex-1 ${isMapView ? "block" : "hidden md:block"}`}>
           <Map compounds={compounds} activeCompound={activeCompound} />
         </main>
       </div>
 
-      {/* Favorites Modal */}
       <Modal isOpen={isModalOpen} onClose={handleModalClose}>
         <Favorites
           favorites={favorites}
           compounds={compounds}
-          onRemove={handleRemove}
-          onClear={handleClear}
+          onRemove={handleRemoveClick}
+          onClear={handleClearClick}
+          setCompounds={setCompounds}
+          setFavorites={setFavorites}
         />
       </Modal>
     </>

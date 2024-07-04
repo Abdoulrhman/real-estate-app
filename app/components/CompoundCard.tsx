@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { FaHeart, FaRegHeart } from "react-icons/fa";
-import axios from "axios";
+import { handleFavorite } from "../utils"; // Import the utility function
+import { Compound } from "../types"; // Import the Compound type
 
 interface CompoundCardProps {
   id: number;
@@ -11,6 +12,9 @@ interface CompoundCardProps {
   isFavorite: boolean;
   onFavorite: (id: number) => void;
   onLocate: () => void;
+  compounds: Compound[];
+  setCompounds: React.Dispatch<React.SetStateAction<Compound[]>>;
+  setFavorites: React.Dispatch<React.SetStateAction<number[]>>;
 }
 
 const CompoundCard: React.FC<CompoundCardProps> = ({
@@ -21,29 +25,29 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
   isFavorite,
   onFavorite,
   onLocate,
+  compounds,
+  setCompounds,
+  setFavorites,
 }) => {
-  const baseUrl = process.env.API_URL || "";
-  const apiUrl = `${baseUrl}/api/compounds`;
+  const [loading, setLoading] = useState(false);
+  const baseUrl = useMemo(() => process.env.API_URL || "", []);
+  const apiUrl = useMemo(() => `${baseUrl}/api/compounds`, [baseUrl]);
 
-  const handleFavoriteClick = async (e: React.MouseEvent) => {
-    e.stopPropagation();
-    try {
-      const response = await axios.put(apiUrl, {
-        id,
-        location,
-        price,
-        image,
-        isFavorite: !isFavorite,
-      });
-      if (response.status === 200) {
+  const handleFavoriteClick = useCallback(
+    async (e: React.MouseEvent) => {
+      e.stopPropagation();
+      setLoading(true);
+      try {
+        await handleFavorite(compounds, setCompounds, setFavorites, apiUrl, id);
         onFavorite(id);
-      } else {
-        console.error("Failed to update favorite status");
+      } catch (error) {
+        console.error("Error updating favorite status:", error);
+      } finally {
+        setLoading(false);
       }
-    } catch (error) {
-      console.error("Error updating favorite status:", error);
-    }
-  };
+    },
+    [apiUrl, compounds, id, onFavorite, setCompounds, setFavorites]
+  );
 
   return (
     <motion.div
@@ -54,7 +58,7 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
     >
       <img
         src={image}
-        alt={location}
+        alt={`Image of ${location}`}
         className="w-full h-48 object-cover rounded-md"
       />
       <div className="mt-2">
@@ -64,8 +68,11 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
       <div
         onClick={handleFavoriteClick}
         className="absolute bottom-3 right-2 cursor-pointer"
+        aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
       >
-        {isFavorite ? (
+        {loading ? (
+          <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
+        ) : isFavorite ? (
           <FaHeart className="text-red-500" size={24} />
         ) : (
           <FaRegHeart className="text-gray-500" size={24} />
