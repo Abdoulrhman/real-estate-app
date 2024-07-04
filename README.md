@@ -2,6 +2,14 @@
 
 This project is a task for PropertySorted Company, demonstrating a simple real estate marketplace front-end application using Next.js, React, Tailwind CSS, Framer Motion, React Leaflet, and TypeScript.
 
+## Screenshots
+
+![Screenshot 1](public/images/screenshots/1.png)
+![Screenshot 2](public/images/screenshots/2.png)
+![Screenshot 3](public/images/screenshots/3.png)
+![Screenshot 4](public/images/screenshots/4.png)
+![Screenshot 5](public/images/screenshots/5.png)
+
 ## Features
 
 - View a list of real estate compounds.
