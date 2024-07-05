@@ -17,7 +17,6 @@ interface MapProps {
   activeCompound: Compound | null;
 }
 
-// Function to create a custom icon with a compound name
 const createCustomIcon = (name: string): DivIcon => {
   return L.divIcon({
     className: "custom-icon",

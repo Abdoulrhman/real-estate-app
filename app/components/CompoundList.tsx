@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import CompoundCard from "./CompoundCard";
-import axios from "axios";
 
 interface Compound {
   id: number;
@@ -25,13 +24,9 @@ const CompoundList: React.FC<CompoundListProps> = ({
   compounds,
   onFavorite,
   onLocate,
-  favorites,
   setCompounds,
   setFavorites,
 }) => {
-  const baseUrl = process.env.API_URL || "";
-  const apiUrl = `${baseUrl}/api/compounds`;
-
   return (
     <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-2 gap-4">
       {compounds.map((compound) => (

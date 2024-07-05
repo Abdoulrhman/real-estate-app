@@ -12,7 +12,6 @@ interface FavoritesProps {
 }
 
 const Favorites: React.FC<FavoritesProps> = ({
-  favorites,
   compounds,
   onRemove,
   onClear,
