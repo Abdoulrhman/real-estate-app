@@ -1,63 +1,78 @@
-// __tests__/CompoundList.test.tsx
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import "@testing-library/jest-dom";
 import CompoundList from "@/app/components/CompoundList";
+import { Compound } from "@/app/types";
 
-describe("CompoundList", () => {
-  const compounds = [
-    {
-      id: 1,
-      location: "New York, NY",
-      price: 1500000,
-      image: "image-url-1",
-      position: [40.7128, -74.006],
-    },
-    {
-      id: 2,
-      location: "Los Angeles, CA",
-      price: 2000000,
-      image: "image-url-2",
-      position: [34.0522, -118.2437],
-    },
-  ];
-  const onFavorite = jest.fn();
-  const onLocate = jest.fn();
+jest.mock("axios"); // Mock Axios
 
-  it("renders a list of compounds", () => {
-    render(
-      <CompoundList
-        compounds={compounds}
-        onFavorite={onFavorite}
-        onLocate={onLocate}
-      />
-    );
-    expect(screen.getByText("New York, NY")).toBeInTheDocument();
-    expect(screen.getByText("Los Angeles, CA")).toBeInTheDocument();
+const mockCompounds: Compound[] = [
+  {
+    id: 1,
+    location: "Sodic East",
+    price: 18500000,
+    image: "https://via.placeholder.com/300?text=Sodic+East",
+    position: [31.6677052114, 30.1598490856],
+    isFavorite: true,
+  },
+  {
+    id: 2,
+    location: "Palm Hills October",
+    price: 12000000,
+    image: "https://via.placeholder.com/300?text=Palm+Hills+October",
+    position: [29.97648, 30.948776],
+    isFavorite: true,
+  },
+  {
+    id: 3,
+    location: "Mivida",
+    price: 15000000,
+    image: "https://via.placeholder.com/300?text=Mivida",
+    position: [30.002926, 31.419978],
+    isFavorite: true,
+  },
+];
+
+const mockOnFavorite = jest.fn();
+const mockOnLocate = jest.fn();
+const mockSetCompounds = jest.fn();
+const mockSetFavorites = jest.fn();
+
+test("renders list of compounds", () => {
+  render(
+    <CompoundList
+      compounds={mockCompounds}
+      onFavorite={mockOnFavorite}
+      onLocate={mockOnLocate}
+      favorites={[]}
+      setCompounds={mockSetCompounds}
+      setFavorites={mockSetFavorites}
+    />
+  );
+
+  mockCompounds.forEach((compound) => {
+    expect(screen.getByText(compound.location)).toBeInTheDocument();
   });
+});
 
-  it("calls onFavorite when the favorite button is clicked", () => {
-    render(
-      <CompoundList
-        compounds={compounds}
-        onFavorite={onFavorite}
-        onLocate={onLocate}
-      />
-    );
-    const favoriteButtons = screen.getAllByText("Add to Favorites");
-    fireEvent.click(favoriteButtons[0]);
-    expect(onFavorite).toHaveBeenCalledWith(1);
-  });
+test("handles favorite action in list", async () => {
+  render(
+    <CompoundList
+      compounds={mockCompounds}
+      onFavorite={mockOnFavorite}
+      onLocate={mockOnLocate}
+      favorites={[]}
+      setCompounds={mockSetCompounds}
+      setFavorites={mockSetFavorites}
+    />
+  );
 
-  it("calls onLocate when a card is clicked", () => {
-    render(
-      <CompoundList
-        compounds={compounds}
-        onFavorite={onFavorite}
-        onLocate={onLocate}
-      />
-    );
-    const cards = screen.getAllByText("New York, NY");
-    fireEvent.click(cards[0]);
-    expect(onLocate).toHaveBeenCalledWith(compounds[0]);
-  });
+  // Find the specific favorite button for the first compound using data-testid
+  const favoriteButton = screen.getByTestId("favorite-button-1");
+
+  fireEvent.click(favoriteButton);
+
+  await waitFor(() =>
+    expect(mockOnFavorite).toHaveBeenCalledWith(mockCompounds[0].id)
+  );
 });

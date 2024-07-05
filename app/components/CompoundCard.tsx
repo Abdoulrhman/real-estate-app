@@ -69,6 +69,7 @@ const CompoundCard: React.FC<CompoundCardProps> = ({
         onClick={handleFavoriteClick}
         className="absolute bottom-3 right-2 cursor-pointer"
         aria-label={isFavorite ? "Remove from favorites" : "Add to favorites"}
+        data-testid={`favorite-button-${id}`}
       >
         {loading ? (
           <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-gray-900"></div>
